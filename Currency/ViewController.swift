@@ -8,7 +8,8 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate {
+class ViewController: UIViewController, UITextFieldDelegate
+{
     
     //MARK Model holders
     var currencyDict:Dictionary = [String:Currency]()
@@ -37,7 +38,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         // print("currencyDict has \(self.currencyDict.count) entries")
@@ -69,26 +71,31 @@ class ViewController: UIViewController, UITextFieldDelegate {
         self.convert(self)
     }
     
-    override func didReceiveMemoryWarning() {
+    override func didReceiveMemoryWarning()
+    {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    func createCurrencyDictionary(){
+    func createCurrencyDictionary()
+    {
         //let c:Currency = Currency(name: name, rate: rate!, flag: flag, symbol: symbol)!
         //self.currencyDict[name] = c
         currencyDict["GBP"] = Currency(name:"GBP", rate:1, flag:"🇬🇧", symbol: "£")
         currencyDict["USD"] = Currency(name:"USD", rate:1, flag:"🇺🇸", symbol: "$")
     }
     
-    func displayCurrencyInfo() {
+    func displayCurrencyInfo()
+    {
         // GBP
-        if let c = currencyDict["GBP"]{
+        if let c = currencyDict["GBP"]
+        {
             gbpSymbolLabel.text = c.symbol
             gbpValueLabel.text = String(format: "%.02f", c.rate)
             gbpFlagLabel.text = c.flag
         }
-        if let c = currencyDict["USD"]{
+        if let c = currencyDict["USD"]
+        {
             usdSymbolLabel.text = c.symbol
             usdValueLabel.text = String(format: "%.02f", c.rate)
             usdFlagLabel.text = c.flag
@@ -96,7 +103,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    func getConversionTable() {
+    func getConversionTable()
+    {
         //var result = "<NOTHING>"
         
         let urlStr:String = "https://api.fixer.io/latest"
@@ -113,23 +121,27 @@ class ViewController: UIViewController, UITextFieldDelegate {
             
             indicator.stopAnimating()
             
-            if error == nil{
+            if error == nil
+            {
                 //print(response!)
                 
                 do {
                     let jsonDict = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [String:Any]
                     //print(jsonDict)
                     
-                    if let ratesData = jsonDict["rates"] as? NSDictionary {
+                    if let ratesData = jsonDict["rates"] as? NSDictionary
+                    {
                         //print(ratesData)
-                        for rate in ratesData{
+                        for rate in ratesData
+                        {
                             //print("#####")
                             let name = String(describing: rate.key)
                             let rate = (rate.value as? NSNumber)?.doubleValue
                             //var symbol:String
                             //var flag:String
                             
-                            switch(name){
+                            switch(name)
+                            {
                             case "USD":
                                 //symbol = "$"
                                 //flag = "🇺🇸"
@@ -166,16 +178,20 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    @IBAction func convert(_ sender: Any) {
+    @IBAction func convert(_ sender: Any)
+    {
         var resultGBP = 0.0
         var resultUSD = 0.0
         
-        if let euro = Double(baseTextField.text!) {
+        if let euro = Double(baseTextField.text!)
+        {
             convertValue = euro
-            if let gbp = self.currencyDict["GBP"] {
+            if let gbp = self.currencyDict["GBP"]
+            {
                 resultGBP = convertValue * gbp.rate
             }
-            if let usd = self.currencyDict["USD"] {
+            if let usd = self.currencyDict["USD"]
+            {
                 resultUSD = convertValue * usd.rate
             }
         }
