@@ -64,6 +64,9 @@ class ViewController: UIViewController, UITextFieldDelegate
         
         self.addDoneButtonOnKeyboard()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: Notification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: Notification.Name.UIKeyboardWillHide, object: nil)
+        
         // get latest currency values
         getConversionTable()
         convertValue = 1
@@ -74,9 +77,7 @@ class ViewController: UIViewController, UITextFieldDelegate
         baseFlag.text = baseCurrency.flag
         
         // set up last updated date
-        let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "dd/MM/yyyy hh:mm a"
-        lastUpdatedDateLabel.text = dateformatter.string(from: lastUpdatedDate)
+        setLatestDate()
         
         // display currency info
         self.displayCurrencyInfo()
@@ -88,6 +89,12 @@ class ViewController: UIViewController, UITextFieldDelegate
         self.convert(self)
     }
     
+    func setLatestDate()
+    {
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "dd/MM/yyyy hh:mm a"
+        lastUpdatedDateLabel.text = dateformatter.string(from: lastUpdatedDate)
+    }
     
     override func didReceiveMemoryWarning()
     {
@@ -99,18 +106,20 @@ class ViewController: UIViewController, UITextFieldDelegate
     {
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 40))
         
-        doneToolbar.barStyle       = UIBarStyle.default
+        doneToolbar.barStyle = UIBarStyle.default
         
-        let flexSpace              = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace,
+                                    target: nil, action: nil)
         
-        let done: UIBarButtonItem  = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(doneButtonAction))
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done,
+                                                target: self, action: #selector(doneButtonAction))
         
         var items = [UIBarButtonItem]()
         items.append(flexSpace)
         items.append(done)
         
         doneToolbar.items = items
-        //doneToolbar.sizeToFit()
+        doneToolbar.sizeToFit()
         
         self.baseTextField.inputAccessoryView = doneToolbar
     }
@@ -118,6 +127,28 @@ class ViewController: UIViewController, UITextFieldDelegate
     @objc func doneButtonAction()
     {
         self.baseTextField.resignFirstResponder()
+    }
+    
+    @objc func keyboardWillShow(notification: Notification)
+    {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue
+        {
+            if self.view.frame.origin.y == 0
+            {
+                self.view.frame.origin.y -= keyboardSize.height
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: Notification)
+    {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue
+        {
+            if self.view.frame.origin.y != 0
+            {
+                self.view.frame.origin.y += keyboardSize.height
+            }
+        }
     }
     
     func createCurrencyDictionary()
@@ -314,6 +345,13 @@ class ViewController: UIViewController, UITextFieldDelegate
         cnyValueLabel.text = String(format: "%.02f", resultCNY)
     }
     
+    @IBAction func refresh(_ sender: Any)
+    {
+        lastUpdatedDate = Date()
+        setLatestDate()
+        //TODO add in update all fields as well
+        
+    }
     
     
     /*
