@@ -76,8 +76,11 @@ class ViewController: UIViewController, UITextFieldDelegate
         baseSymbol.text = baseCurrency.symbol
         baseFlag.text = baseCurrency.flag
         
+        
         // set up last updated date
         setLatestDate()
+        
+        //self.convert()
         
         // display currency info
         self.displayCurrencyInfo()
@@ -86,7 +89,13 @@ class ViewController: UIViewController, UITextFieldDelegate
         // setup view mover
         baseTextField.delegate = self
         
-        self.convert(self)
+    }
+    
+    //simple method to remove keyboard when tapped anywhere but the keyboard Link:
+    //https://stackoverflow.com/questions/32281651/how-to-dismiss-keyboard-when-touching-anywhere-outside-uitextfield-in-swift
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
+    {
+        self.view.endEditing(true)
     }
     
     func setLatestDate()
@@ -101,6 +110,7 @@ class ViewController: UIViewController, UITextFieldDelegate
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     
     func addDoneButtonOnKeyboard()
     {
@@ -129,6 +139,7 @@ class ViewController: UIViewController, UITextFieldDelegate
         self.baseTextField.resignFirstResponder()
     }
     
+    
     @objc func keyboardWillShow(notification: Notification)
     {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue
@@ -150,14 +161,16 @@ class ViewController: UIViewController, UITextFieldDelegate
             }
         }
     }
+
+    
     
     func createCurrencyDictionary()
     {
         //let c:Currency = Currency(name: name, rate: rate!, flag: flag, symbol: symbol)!
         //self.currencyDict[name] = c
-        currencyDict["GBP"] = Currency(name:"GBP", rate:1, flag:"🇬🇧", symbol: "£")
-        currencyDict["USD"] = Currency(name:"USD", rate:1, flag:"🇺🇸", symbol: "$")
-        currencyDict["CAD"] = Currency(name:"CAD",  rate:1, flag: "🇨🇦", symbol: "$")
+        currencyDict["GBP"] = Currency(name:"GBP", rate: 1, flag: "🇬🇧", symbol: "£")
+        currencyDict["USD"] = Currency(name:"USD", rate: 1, flag: "🇺🇸", symbol: "$")
+        currencyDict["CAD"] = Currency(name:"CAD", rate: 1, flag: "🇨🇦", symbol: "$")
         currencyDict["JPY"] = Currency(name:"JPY", rate: 1, flag: "🇯🇵", symbol: "¥")
         currencyDict["AUD"] = Currency(name:"AUD", rate: 1, flag: "🇦🇺", symbol: "$")
         currencyDict["CNY"] = Currency(name:"CNY", rate: 1, flag: "🇨🇳", symbol: "¥")
@@ -219,15 +232,18 @@ class ViewController: UIViewController, UITextFieldDelegate
         view.addSubview(indicator)
         indicator.startAnimating()
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) { response, data, error in
+        URLSession.shared.dataTask(with: request)
+        { data, response, error in
             
-            indicator.stopAnimating()
+            DispatchQueue.main.async(execute:
+                { indicator.stopAnimating()   }) // stop animating
             
             if error == nil
             {
                 //print(response!)
                 
-                do {
+                do
+                {
                     let jsonDict = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [String:Any]
                     //print(jsonDict)
                     
@@ -284,19 +300,21 @@ class ViewController: UIViewController, UITextFieldDelegate
                         self.lastUpdatedDate = Date()
                     }
                 }
-                catch let error as NSError{
+                catch let error as NSError
+                {
                     print(error)
                 }
             }
-            else{
+            else
+            {
                 print("Error")
             }
             
-        }
+        }.resume()
         
     }
     
-    @IBAction func convert(_ sender: Any)
+    func convert()
     {
         var resultGBP = 0.0
         var resultUSD = 0.0
@@ -343,14 +361,20 @@ class ViewController: UIViewController, UITextFieldDelegate
         audValueLabel.text = String(format: "%.02f", resultAUD)
         yenValueLabel.text = String(format: "%.02f", resultJPY)
         cnyValueLabel.text = String(format: "%.02f", resultCNY)
+        
+    }
+    
+    @IBAction func convert(_ sender: Any)
+    {
+        convert()
     }
     
     @IBAction func refresh(_ sender: Any)
     {
-        lastUpdatedDate = Date()
+        self.lastUpdatedDate = Date()
         setLatestDate()
         //TODO add in update all fields as well
-        
+        convert()
     }
     
     

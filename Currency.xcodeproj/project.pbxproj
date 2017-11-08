@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B0F0EAB1FB36A4100B38D41 /* appiconmaker in Resources */ = {isa = PBXBuildFile; fileRef = 6B0F0EAA1FB36A4100B38D41 /* appiconmaker */; };
 		FF66C5521FA34F4D00E9354E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF66C5511FA34F4D00E9354E /* AppDelegate.swift */; };
 		FF66C5541FA34F4D00E9354E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF66C5531FA34F4D00E9354E /* ViewController.swift */; };
 		FF66C5571FA34F4D00E9354E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF66C5551FA34F4D00E9354E /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6B0F0EAA1FB36A4100B38D41 /* appiconmaker */ = {isa = PBXFileReference; lastKnownFileType = folder; name = appiconmaker; path = ../../../Downloads/appiconmaker; sourceTree = "<group>"; };
 		FF66C54E1FA34F4D00E9354E /* Currency.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Currency.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF66C5511FA34F4D00E9354E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FF66C5531FA34F4D00E9354E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				FF66C5531FA34F4D00E9354E /* ViewController.swift */,
 				FF66C5551FA34F4D00E9354E /* Main.storyboard */,
 				FF66C5581FA34F4D00E9354E /* Assets.xcassets */,
+				6B0F0EAA1FB36A4100B38D41 /* appiconmaker */,
 				FF66C55A1FA34F4D00E9354E /* LaunchScreen.storyboard */,
 				FF66C55D1FA34F4D00E9354E /* Info.plist */,
 				FF66C5651FA3531400E9354E /* README.md */,
@@ -130,6 +133,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF66C55C1FA34F4D00E9354E /* LaunchScreen.storyboard in Resources */,
+				6B0F0EAB1FB36A4100B38D41 /* appiconmaker in Resources */,
 				FF66C5591FA34F4D00E9354E /* Assets.xcassets in Resources */,
 				FF66C5661FA3531400E9354E /* README.md in Resources */,
 				FF66C5571FA34F4D00E9354E /* Main.storyboard in Resources */,
@@ -283,8 +287,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3H68RG2SRC;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Currency/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ie.wit.Currency;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -298,8 +303,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3H68RG2SRC;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Currency/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ie.wit.Currency;
 				PRODUCT_NAME = "$(TARGET_NAME)";
