@@ -60,6 +60,7 @@ class ViewController: UIViewController, UITextFieldDelegate
         // print("currencyDict has \(self.currencyDict.count) entries")
         
         // create currency dictionary
+        
         self.createCurrencyDictionary()
         
         self.addDoneButtonOnKeyboard()
@@ -72,7 +73,7 @@ class ViewController: UIViewController, UITextFieldDelegate
         convertValue = 1
         
         // set up base currency screen items
-        baseTextField.text = String(format: "%.02f", baseCurrency.rate)
+        //baseTextField.text = String(format: "%.02f", baseCurrency.rate)
         baseSymbol.text = baseCurrency.symbol
         baseFlag.text = baseCurrency.flag
         
@@ -89,6 +90,22 @@ class ViewController: UIViewController, UITextFieldDelegate
         // setup view mover
         baseTextField.delegate = self
         
+        //gbpValueLabel.layer.borderWidth = 0.5
+        //gbpValueLabel.layer.borderColor = UIColor.white.cgColor
+        
+    }
+    
+    //change the style of status bar to white
+    override func viewWillAppear(_ animated: Bool)
+    {
+        UIApplication.shared.statusBarStyle = .lightContent
+    }
+    
+    //change status bar style back to default
+    override func viewWillDisappear(_ animated: Bool)
+    {
+        super.viewWillDisappear(animated)
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
     }
     
     //simple method to remove keyboard when tapped anywhere but the keyboard Link:
@@ -110,7 +127,6 @@ class ViewController: UIViewController, UITextFieldDelegate
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     
     func addDoneButtonOnKeyboard()
     {
@@ -323,33 +339,40 @@ class ViewController: UIViewController, UITextFieldDelegate
         var resultAUD = 0.0
         var resultCNY = 0.0
         
-        if let euro = Double(baseTextField.text!)
+        if(baseTextField.text!.count < 10)
         {
-            convertValue = euro
-            if let gbp = self.currencyDict["GBP"]
+            if let euro = Double(baseTextField.text!)
             {
-                resultGBP = convertValue * gbp.rate
+                convertValue = euro
+                if let gbp = self.currencyDict["GBP"]
+                {
+                    resultGBP = convertValue * gbp.rate
+                }
+                if let usd = self.currencyDict["USD"]
+                {
+                    resultUSD = convertValue * usd.rate
+                }
+                if let cad = self.currencyDict["CAD"]
+                {
+                    resultCAD = convertValue * cad.rate
+                }
+                if let aud = self.currencyDict["AUD"]
+                {
+                    resultAUD = convertValue * aud.rate
+                }
+                if let jpy = self.currencyDict["JPY"]
+                {
+                    resultJPY = convertValue * jpy.rate
+                }
+                if let cny = self.currencyDict["CNY"]
+                {
+                    resultCNY = convertValue * cny.rate
+                }
             }
-            if let usd = self.currencyDict["USD"]
-            {
-                resultUSD = convertValue * usd.rate
-            }
-            if let cad = self.currencyDict["CAD"]
-            {
-                resultCAD = convertValue * cad.rate
-            }
-            if let aud = self.currencyDict["AUD"]
-            {
-                resultAUD = convertValue * aud.rate
-            }
-            if let jpy = self.currencyDict["JPY"]
-            {
-                resultJPY = convertValue * jpy.rate
-            }
-            if let cny = self.currencyDict["CNY"]
-            {
-                resultCNY = convertValue * cny.rate
-            }
+        }
+        else
+        {
+            baseTextField.text = String(1) //reset to 1 if too long
         }
         //GBP
         

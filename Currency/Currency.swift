@@ -8,7 +8,8 @@
 
 import Foundation
 
-class Currency {
+class Currency
+{
     //MARK: Properties
     var name:String
     var rate:Double
@@ -16,9 +17,11 @@ class Currency {
     var symbol:String
     
     //MARK: initiaizer
-    init?(name:String, rate:Double, flag:String, symbol:String){
+    init?(name:String, rate:Double, flag:String, symbol:String)
+    {
         // Initialization should fail if there is no name or if the rating is negative.
-        if name.isEmpty || rate < 0  || flag.isEmpty || symbol.isEmpty {
+        if name.isEmpty || rate < 0  || flag.isEmpty || symbol.isEmpty
+        {
             return nil
         }
         
