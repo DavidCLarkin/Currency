@@ -16,16 +16,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
     //MARK Model holders
     var currencyDict:Dictionary = [String:Currency]()
     var currencyArray = [Currency]()
-    var currencyFlagArray = [UILabel]()
-    var currencySymbolArray = [UILabel]()
+    
     var baseCurrency:Currency = Currency.init(name:"EUR", rate:1, flag:"🇪🇺", symbol:"€")!
     var lastUpdatedDate:Date = Date()
     
     var convertValue:Double = 0
     var bottomConstraintConstant:CGFloat = 60.0
     
-    var tempSymbol:String = "";
-    var tempFlag:String = "";
+
     
     //MARK Outlets
     //@IBOutlet weak var convertedLabel: UILabel!
@@ -63,6 +61,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
     @IBOutlet weak var cnyValueLabel: UILabel!
     @IBOutlet weak var cnyFlagLabel: UILabel!
     
+    @IBOutlet weak var eurSymbolLabel: UILabel!
+    @IBOutlet weak var eurValueLabel: UILabel!
+    @IBOutlet weak var eurFlagLabel: UILabel!
+    
+    
     //var indicator: UIActivityIndicatorView = UIActivityIndicatorView()
 
     
@@ -70,8 +73,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
     {
         super.viewDidLoad()
         
-        currencyFlagArray = [gbpFlagLabel, usdFlagLabel, cadFlagLabel, yenFlagLabel, audFlagLabel, cnyFlagLabel]
-        currencySymbolArray = [gbpSymbolLabel, usdSymbolLabel, cadSymbolLabel, yenSymbolLabel, audSymbolLabel, cnySymbolLabel]
         // create currency dictionary
         self.createCurrencyDictionary()
         
@@ -84,9 +85,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         convertValue = 1
         
         // set up base currency screen items
+        
         baseSymbol.text = baseCurrency.symbol
         baseFlag.text = baseCurrency.flag
-        
+        pickerView.selectRow(6, inComponent: 0, animated: false)
         
         // set up last updated date
         setLatestDate()
@@ -107,7 +109,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
     {
-        return currencyArray[row].name + currencyArray[row].symbol
+        let char = currencyArray[row].name.index(currencyArray[row].name.startIndex, offsetBy: 0)
+        let symbol = currencyArray[row].symbol
+        let name:String = [currencyArray[row].name[char]] + symbol
+        
+        return name
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
@@ -115,14 +121,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         return currencyArray.count
     }
     
+    //changes the base flag and symbol to match the new one
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
-        tempSymbol = baseSymbol.text!
-        tempFlag = baseFlag.text!
-        
         baseSymbol.text = currencyArray[row].symbol
         baseFlag.text = currencyArray[row].flag
         
+        convert()
     }
     //change the style of status bar to white
     override func viewWillAppear(_ animated: Bool)
@@ -145,8 +150,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         self.view.layoutIfNeeded()
         UIView.animate(withDuration: 0.25, animations:
         {
-                self.bottomConstraint.constant = self.bottomConstraintConstant
-                self.view.layoutIfNeeded()
+            self.bottomConstraint.constant = self.bottomConstraintConstant
+            self.view.layoutIfNeeded()
         })
         self.view.endEditing(true)
         self.view.layoutIfNeeded()
@@ -242,6 +247,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         currencyArray.append(currencyDict["AUD"]!)
         currencyDict["CNY"] = Currency(name:"CNY", rate: 1, flag: "🇨🇳", symbol: "¥")
         currencyArray.append(currencyDict["CNY"]!)
+        currencyDict["EUR"] = Currency(name:"EUR", rate: 1, flag: "🇪🇺", symbol: "€")
+        currencyArray.append(currencyDict["EUR"]!)
+        
     }
     
     func displayCurrencyInfo()
@@ -281,6 +289,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
             cnySymbolLabel.text = c.symbol
             cnyValueLabel.text = String(format: "%.02f", c.rate)
             cnyFlagLabel.text = c.flag
+        }
+        if let c = currencyDict["EUR"]
+        {
+            eurSymbolLabel.text = c.symbol
+            eurValueLabel.text = String(format: "%.02f", c.rate)
+            eurFlagLabel.text = c.flag
         }
     }
   
@@ -359,6 +373,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
                                 let c:Currency = self.currencyDict["CNY"]!
                                 c.rate = rate!
                                 self.currencyDict["CNY"] = c
+                            case "EUR":
+                                let c:Currency = self.currencyDict["EUR"]!
+                                c.rate = rate!
+                                self.currencyDict["EUR"] = c
                             default:
                                 print("Ignoring currency: \(String(describing: rate))")
                             }
@@ -386,6 +404,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         var resultJPY = 0.0
         var resultAUD = 0.0
         var resultCNY = 0.0
+        var resultEUR = 0.0
+        
+        baseCurrency.rate = (currencyDict[currencyArray[pickerView.selectedRow(inComponent: 0)].name]?.rate)!
         
         if(baseTextField.text!.count < 10)
         {
@@ -394,27 +415,31 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
                 convertValue = euro
                 if let gbp = self.currencyDict["GBP"]
                 {
-                    resultGBP = convertValue * gbp.rate
+                    resultGBP = convertValue * (gbp.rate/baseCurrency.rate)
                 }
                 if let usd = self.currencyDict["USD"]
                 {
-                    resultUSD = convertValue * usd.rate
+                    resultUSD = convertValue * (usd.rate/baseCurrency.rate)
                 }
                 if let cad = self.currencyDict["CAD"]
                 {
-                    resultCAD = convertValue * cad.rate
+                    resultCAD = convertValue * (cad.rate/baseCurrency.rate)
                 }
                 if let aud = self.currencyDict["AUD"]
                 {
-                    resultAUD = convertValue * aud.rate
+                    resultAUD = convertValue * (aud.rate/baseCurrency.rate)
                 }
                 if let jpy = self.currencyDict["JPY"]
                 {
-                    resultJPY = convertValue * jpy.rate
+                    resultJPY = convertValue * (jpy.rate/baseCurrency.rate)
                 }
                 if let cny = self.currencyDict["CNY"]
                 {
-                    resultCNY = convertValue * cny.rate
+                    resultCNY = convertValue * (cny.rate/baseCurrency.rate)
+                }
+                if let eur = self.currencyDict["EUR"]
+                {
+                    resultEUR = convertValue * (eur.rate/baseCurrency.rate)
                 }
             }
         }
@@ -422,9 +447,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         {
             baseTextField.text = String(1) //reset to 1 if too long
         }
-        //GBP
-        
-        //convertedLabel.text = String(describing: resultGBP)
         
         gbpValueLabel.text = String(format: "%.02f", resultGBP)
         usdValueLabel.text = String(format: "%.02f", resultUSD)
@@ -432,6 +454,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
         audValueLabel.text = String(format: "%.02f", resultAUD)
         yenValueLabel.text = String(format: "%.02f", resultJPY)
         cnyValueLabel.text = String(format: "%.02f", resultCNY)
+        eurValueLabel.text = String(format: "%.02f", resultEUR)
         
     }
     
@@ -444,7 +467,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSou
     {
         self.lastUpdatedDate = Date()
         setLatestDate()
-        //TODO add in update all fields as well
         convert()
     }
     
