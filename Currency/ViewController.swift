@@ -3,25 +3,36 @@
 //  Currency
 //
 //  Created by Robert O'Connor on 18/10/2017.
+//  Edited by David Larkin
 //  Copyright © 2017 WIT. All rights reserved.
 //
 
 import UIKit
 
 
-class ViewController: UIViewController, UITextFieldDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate
 {
     
     //MARK Model holders
     var currencyDict:Dictionary = [String:Currency]()
     var currencyArray = [Currency]()
+    var currencyFlagArray = [UILabel]()
+    var currencySymbolArray = [UILabel]()
     var baseCurrency:Currency = Currency.init(name:"EUR", rate:1, flag:"🇪🇺", symbol:"€")!
     var lastUpdatedDate:Date = Date()
     
     var convertValue:Double = 0
+    var bottomConstraintConstant:CGFloat = 60.0
+    
+    var tempSymbol:String = "";
+    var tempFlag:String = "";
     
     //MARK Outlets
     //@IBOutlet weak var convertedLabel: UILabel!
+    
+    @IBOutlet weak var pickerView: UIPickerView!
+    @IBOutlet weak var bottomConstraint : NSLayoutConstraint!
+    @IBOutlet weak var stackView : UIStackView!
     
     @IBOutlet weak var baseSymbol: UILabel!
     @IBOutlet weak var baseTextField: UITextField!
@@ -51,29 +62,28 @@ class ViewController: UIViewController, UITextFieldDelegate
     @IBOutlet weak var cnySymbolLabel : UILabel!
     @IBOutlet weak var cnyValueLabel: UILabel!
     @IBOutlet weak var cnyFlagLabel: UILabel!
+    
+    //var indicator: UIActivityIndicatorView = UIActivityIndicatorView()
 
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        // print("currencyDict has \(self.currencyDict.count) entries")
         
+        currencyFlagArray = [gbpFlagLabel, usdFlagLabel, cadFlagLabel, yenFlagLabel, audFlagLabel, cnyFlagLabel]
+        currencySymbolArray = [gbpSymbolLabel, usdSymbolLabel, cadSymbolLabel, yenSymbolLabel, audSymbolLabel, cnySymbolLabel]
         // create currency dictionary
-        
         self.createCurrencyDictionary()
         
         self.addDoneButtonOnKeyboard()
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: Notification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: Notification.Name.UIKeyboardWillHide, object: nil)
         
         // get latest currency values
         getConversionTable()
         convertValue = 1
         
         // set up base currency screen items
-        //baseTextField.text = String(format: "%.02f", baseCurrency.rate)
         baseSymbol.text = baseCurrency.symbol
         baseFlag.text = baseCurrency.flag
         
@@ -86,15 +96,34 @@ class ViewController: UIViewController, UITextFieldDelegate
         // display currency info
         self.displayCurrencyInfo()
         
-        
         // setup view mover
         baseTextField.delegate = self
-        
-        //gbpValueLabel.layer.borderWidth = 0.5
-        //gbpValueLabel.layer.borderColor = UIColor.white.cgColor
-        
     }
     
+    func numberOfComponents(in pickerView: UIPickerView) -> Int
+    {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
+    {
+        return currencyArray[row].name + currencyArray[row].symbol
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
+    {
+        return currencyArray.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
+    {
+        tempSymbol = baseSymbol.text!
+        tempFlag = baseFlag.text!
+        
+        baseSymbol.text = currencyArray[row].symbol
+        baseFlag.text = currencyArray[row].flag
+        
+    }
     //change the style of status bar to white
     override func viewWillAppear(_ animated: Bool)
     {
@@ -108,11 +137,19 @@ class ViewController: UIViewController, UITextFieldDelegate
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
     }
     
-    //simple method to remove keyboard when tapped anywhere but the keyboard Link:
-    //https://stackoverflow.com/questions/32281651/how-to-dismiss-keyboard-when-touching-anywhere-outside-uitextfield-in-swift
+    //simple method to remove keyboard when tapped anywhere but the keyboard and reset constraint on textfield. Link:
+    //https://www.youtube.com/watch?v=N3f0Esjc5aQ
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
     {
+        baseTextField.resignFirstResponder()
+        self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.25, animations:
+        {
+                self.bottomConstraint.constant = self.bottomConstraintConstant
+                self.view.layoutIfNeeded()
+        })
         self.view.endEditing(true)
+        self.view.layoutIfNeeded()
     }
     
     func setLatestDate()
@@ -138,7 +175,7 @@ class ViewController: UIViewController, UITextFieldDelegate
                                     target: nil, action: nil)
         
         let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done,
-                                                target: self, action: #selector(doneButtonAction))
+                                                    target: self, action: #selector(ViewController.doneButtonAction))
         
         var items = [UIBarButtonItem]()
         items.append(flexSpace)
@@ -152,49 +189,63 @@ class ViewController: UIViewController, UITextFieldDelegate
     
     @objc func doneButtonAction()
     {
+        UIView.animate(withDuration: 0.25, animations:
+        {
+            //reset the constraint to original one
+            self.bottomConstraint.constant = self.bottomConstraintConstant
+            self.view.layoutIfNeeded()
+        })
+        
         self.baseTextField.resignFirstResponder()
     }
     
-    
+    //Method that is fired when keyboard is to show, idea from youtube link above
     @objc func keyboardWillShow(notification: Notification)
     {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue
+        if let info = notification.userInfo
         {
-            if self.view.frame.origin.y == 0
+            let rect = (info["UIKeyboardFrameEndUserInfoKey"] as! NSValue).cgRectValue //keyboard size
+            
+            // y position to get to with the text field
+            let targetY = view.frame.size.height - rect.height - 20 - baseTextField.frame.size.height
+            
+            //the current position of the text field in the screen
+            let textFieldY = stackView.frame.origin.y + baseTextField.frame.origin.y
+            
+            //difference of position to move to and current position of text field
+            let difference = targetY - textFieldY
+            
+            //change the constraint to the pre-set constraint minus the difference to move the text field to the new position
+            let targetOffsetConstraint = bottomConstraint.constant - difference
+            
+            self.view.layoutIfNeeded()
+            
+            UIView.animate(withDuration: 0.25, animations:
             {
-                self.view.frame.origin.y -= keyboardSize.height
-            }
-        }
-    }
-    
-    @objc func keyboardWillHide(notification: Notification)
-    {
-        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue
-        {
-            if self.view.frame.origin.y != 0
-            {
-                self.view.frame.origin.y += keyboardSize.height
-            }
+                self.bottomConstraint.constant = targetOffsetConstraint
+                self.view.layoutIfNeeded()
+            })
         }
     }
 
-    
-    
     func createCurrencyDictionary()
     {
-        //let c:Currency = Currency(name: name, rate: rate!, flag: flag, symbol: symbol)!
-        //self.currencyDict[name] = c
         currencyDict["GBP"] = Currency(name:"GBP", rate: 1, flag: "🇬🇧", symbol: "£")
+        currencyArray.append(currencyDict["GBP"]!)
         currencyDict["USD"] = Currency(name:"USD", rate: 1, flag: "🇺🇸", symbol: "$")
+        currencyArray.append(currencyDict["USD"]!)
         currencyDict["CAD"] = Currency(name:"CAD", rate: 1, flag: "🇨🇦", symbol: "$")
+        currencyArray.append(currencyDict["CAD"]!)
         currencyDict["JPY"] = Currency(name:"JPY", rate: 1, flag: "🇯🇵", symbol: "¥")
+        currencyArray.append(currencyDict["JPY"]!)
         currencyDict["AUD"] = Currency(name:"AUD", rate: 1, flag: "🇦🇺", symbol: "$")
+        currencyArray.append(currencyDict["AUD"]!)
         currencyDict["CNY"] = Currency(name:"CNY", rate: 1, flag: "🇨🇳", symbol: "¥")
+        currencyArray.append(currencyDict["CNY"]!)
     }
     
     func displayCurrencyInfo()
     {
-        // GBP
         if let c = currencyDict["GBP"]
         {
             gbpSymbolLabel.text = c.symbol
@@ -232,47 +283,43 @@ class ViewController: UIViewController, UITextFieldDelegate
             cnyFlagLabel.text = c.flag
         }
     }
-    
+  
     
     func getConversionTable()
     {
-        //var result = "<NOTHING>"
-        
+
         let urlStr:String = "https://api.fixer.io/latest"
         
         var request = URLRequest(url: URL(string: urlStr)!)
         request.httpMethod = "GET"
         
-        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         indicator.center = view.center
         view.addSubview(indicator)
         indicator.startAnimating()
-        
+        UIApplication.shared.beginIgnoringInteractionEvents()
+ 
         URLSession.shared.dataTask(with: request)
         { data, response, error in
             
             DispatchQueue.main.async(execute:
-                { indicator.stopAnimating()   }) // stop animating
-            
+            {
+                indicator.stopAnimating()
+                UIApplication.shared.endIgnoringInteractionEvents()
+            }) // stop animating
+
             if error == nil
             {
-                //print(response!)
-                
                 do
                 {
                     let jsonDict = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [String:Any]
-                    //print(jsonDict)
                     
                     if let ratesData = jsonDict["rates"] as? NSDictionary
                     {
-                        //print(ratesData)
                         for rate in ratesData
                         {
-                            //print("#####")
                             let name = String(describing: rate.key)
                             let rate = (rate.value as? NSNumber)?.doubleValue
-                            //var symbol:String
-                            //var flag:String
                             
                             switch(name)
                             {
@@ -289,29 +336,32 @@ class ViewController: UIViewController, UITextFieldDelegate
                                 c.rate = rate!
                                 self.currencyDict["GBP"] = c
                             case "CAD":
+                                //symbol = "$"
+                                //flag = "🇨🇦"
                                 let c:Currency = self.currencyDict["CAD"]!
                                 c.rate = rate!
                                 self.currencyDict["CAD"] = c
                             case "AUD":
+                                //symbol = "$"
+                                //flag = "🇦🇺"
                                 let c:Currency = self.currencyDict["AUD"]!
                                 c.rate = rate!
                                 self.currencyDict["AUD"] = c
                             case "JPY":
+                                //symbol = "¥"
+                                //flag = "🇯🇵"
                                 let c:Currency = self.currencyDict["JPY"]!
                                 c.rate = rate!
                                 self.currencyDict["JPY"] = c
                             case "CNY":
+                                //symbol = "¥"
+                                //flag = "🇨🇳"
                                 let c:Currency = self.currencyDict["CNY"]!
                                 c.rate = rate!
                                 self.currencyDict["CNY"] = c
                             default:
                                 print("Ignoring currency: \(String(describing: rate))")
                             }
-                            
-                            /*
-                             let c:Currency = Currency(name: name, rate: rate!, flag: flag, symbol: symbol)!
-                             self.currencyDict[name] = c
-                             */
                         }
                         self.lastUpdatedDate = Date()
                     }
@@ -325,9 +375,7 @@ class ViewController: UIViewController, UITextFieldDelegate
             {
                 print("Error")
             }
-            
         }.resume()
-        
     }
     
     func convert()
