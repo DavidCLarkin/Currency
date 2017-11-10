@@ -18,21 +18,104 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" alpha="0.75" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Icon-167.png" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ycI-pg-acF">
-                                <rect key="frame" x="67" y="269" width="241" height="129"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SP6-Ml-ziE">
+                                <rect key="frame" x="67" y="517" width="240" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Zzt-uo-X53"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uKX-dT-Tvj">
+                                <rect key="frame" x="67" y="30" width="114" height="18"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="18" id="Yow-Jc-VXD"/>
+                                    <constraint firstAttribute="width" constant="114" id="d4V-Gw-9hd"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EZ4-XP-faJ">
+                                <rect key="frame" x="189" y="30" width="118" height="18"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jT4-A8-BVf">
+                                <rect key="frame" x="67" y="65" width="240" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="euH-Kq-GiP"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JeG-yv-vOa">
+                                <rect key="frame" x="67" y="115" width="240" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="OHr-RW-ufr"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="the-6U-zzI">
+                                <rect key="frame" x="67" y="165" width="240" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="5AH-1L-f2Z"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="d80-3h-oOM">
+                                <rect key="frame" x="67" y="215" width="240" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="2I8-Ci-esT"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gJd-69-Jcm">
+                                <rect key="frame" x="67" y="265" width="240" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="8hZ-y5-XO4"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yQt-WW-7Bg">
+                                <rect key="frame" x="67" y="318" width="240" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Qr0-5h-IWc"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="jT4-A8-BVf" firstAttribute="leading" secondItem="uKX-dT-Tvj" secondAttribute="leading" id="2M5-Tv-zZE"/>
+                            <constraint firstItem="gJd-69-Jcm" firstAttribute="leading" secondItem="d80-3h-oOM" secondAttribute="leading" id="46A-CX-vrT"/>
+                            <constraint firstItem="the-6U-zzI" firstAttribute="trailing" secondItem="JeG-yv-vOa" secondAttribute="trailing" id="511-A6-Qkw"/>
+                            <constraint firstItem="SP6-Ml-ziE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="67" id="6wb-Vp-RQq"/>
+                            <constraint firstItem="jT4-A8-BVf" firstAttribute="trailing" secondItem="EZ4-XP-faJ" secondAttribute="trailing" id="807-gf-1lX"/>
+                            <constraint firstItem="d80-3h-oOM" firstAttribute="top" secondItem="the-6U-zzI" secondAttribute="bottom" constant="20" id="DjT-ma-pNG"/>
+                            <constraint firstItem="d80-3h-oOM" firstAttribute="leading" secondItem="the-6U-zzI" secondAttribute="leading" id="Dxd-GA-LnK"/>
+                            <constraint firstItem="d80-3h-oOM" firstAttribute="trailing" secondItem="the-6U-zzI" secondAttribute="trailing" id="FF3-Fk-uce"/>
+                            <constraint firstItem="yQt-WW-7Bg" firstAttribute="trailing" secondItem="gJd-69-Jcm" secondAttribute="trailing" id="FlU-xH-Y1x"/>
+                            <constraint firstItem="the-6U-zzI" firstAttribute="top" secondItem="JeG-yv-vOa" secondAttribute="bottom" constant="20" id="JIz-wI-rBv"/>
+                            <constraint firstItem="gJd-69-Jcm" firstAttribute="top" secondItem="d80-3h-oOM" secondAttribute="bottom" constant="20" id="JOQ-qw-3CR"/>
+                            <constraint firstItem="EZ4-XP-faJ" firstAttribute="trailing" secondItem="SP6-Ml-ziE" secondAttribute="trailing" id="Nbs-g1-Dxx"/>
+                            <constraint firstItem="uKX-dT-Tvj" firstAttribute="bottom" secondItem="EZ4-XP-faJ" secondAttribute="bottom" id="Nd0-pP-Sy1"/>
+                            <constraint firstItem="yQt-WW-7Bg" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Su0-u4-NSn"/>
+                            <constraint firstItem="yQt-WW-7Bg" firstAttribute="leading" secondItem="gJd-69-Jcm" secondAttribute="leading" id="VxK-ng-1RY"/>
+                            <constraint firstItem="gJd-69-Jcm" firstAttribute="trailing" secondItem="d80-3h-oOM" secondAttribute="trailing" id="XBM-IE-s5w"/>
+                            <constraint firstItem="uKX-dT-Tvj" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="XRX-86-beb"/>
+                            <constraint firstItem="jT4-A8-BVf" firstAttribute="leading" secondItem="JeG-yv-vOa" secondAttribute="leading" id="afJ-qy-GSq"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="SP6-Ml-ziE" secondAttribute="bottom" constant="120" id="bRU-Id-b2w"/>
+                            <constraint firstItem="jT4-A8-BVf" firstAttribute="top" secondItem="uKX-dT-Tvj" secondAttribute="bottom" constant="17" id="gze-Cb-2fI"/>
+                            <constraint firstItem="uKX-dT-Tvj" firstAttribute="leading" secondItem="SP6-Ml-ziE" secondAttribute="leading" id="h9y-JJ-tNC"/>
+                            <constraint firstItem="SP6-Ml-ziE" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="nwe-i9-MKd"/>
+                            <constraint firstItem="the-6U-zzI" firstAttribute="leading" secondItem="JeG-yv-vOa" secondAttribute="leading" id="ny0-gG-I8f"/>
+                            <constraint firstItem="EZ4-XP-faJ" firstAttribute="leading" secondItem="uKX-dT-Tvj" secondAttribute="trailing" constant="8" symbolic="YES" id="pJG-23-IsO"/>
+                            <constraint firstItem="jT4-A8-BVf" firstAttribute="trailing" secondItem="JeG-yv-vOa" secondAttribute="trailing" id="qrJ-tf-Ovc"/>
+                            <constraint firstItem="uKX-dT-Tvj" firstAttribute="top" secondItem="EZ4-XP-faJ" secondAttribute="top" id="ymE-ML-XUO"/>
+                            <constraint firstItem="JeG-yv-vOa" firstAttribute="top" secondItem="jT4-A8-BVf" secondAttribute="bottom" constant="20" id="yqs-Vi-Qmd"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="Icon-167.png" width="167" height="167"/>
-    </resources>
 </document>
